@@ -1,75 +1,77 @@
-//¶íÂŞË¹·½¿éÖ÷ÒªµÄº¯Êı
+ï»¿//ä¿„ç½—æ–¯æ–¹å—ä¸»è¦çš„å‡½æ•°
+
+#include "TetrisControl.h"
 #include <iostream>
 using namespace::std;
 #include <time.h>
 #include <conio.h>
 void ShowUI();
 
-#define ROW 16
-#define COL 16
+#define ROW 12
+#define COL 12
 #define BOX_WIDTH 4
-char g_szTetris[ROW][COL] = {};
+TCHAR g_szTetris[ROW][COL] = {};
 
 int g_BoxType = 0;
 int g_BoxShape = 0;
 int g_BoxIndex = 0;
-int g_BoxMarkRow = 0;//³õÊ¼row³öÏÖÎ»ÖÃ
-int g_BoxMarkCol = 6;//³õÊ¼col³öÏÖÎ»ÖÃ
-char g_szBox[][16] = {
+int g_BoxMarkRow = 0;//åˆå§‹rowå‡ºç°ä½ç½®
+int g_BoxMarkCol = 6;//åˆå§‹colå‡ºç°ä½ç½®
+TCHAR g_szBox[][16] = {
 
-	//¡ö ¡ö ¡ö ¡ö
+	//â–  â–  â–  â– 
 	{1,1,1,1,
 	 0,0,0,0,
 	 0,0,0,0,
 	 0,0,0,0,
-	},
+	},	
 
-	//¡ö ¡ö ¡ö ¡ö
-	{1,1,1,1,
-	 0,0,0,0,
-	 0,0,0,0,
-	 0,0,0,0,
-	},
-
-	//¡ö
-	//¡ö
-	//¡ö
-	//¡ö
+	//â– 
+	//â– 
+	//â– 
+	//â– 
 	{1,0,0,0,
 	 1,0,0,0,
 	 1,0,0,0,
 	 1,0,0,0,
 	},
 
-	//¡ö
-	//¡ö
-	//¡ö
-	//¡ö
+	//â–  â–  â–  â– 
+	{1,1,1,1,
+	 0,0,0,0,
+	 0,0,0,0,
+	 0,0,0,0,
+	},
+
+	//â– 
+	//â– 
+	//â– 
+	//â– 
 	{1,0,0,0,
 	 1,0,0,0,
 	 1,0,0,0,
 	 1,0,0,0,
 	},
 
-	//  ¡ö
-	//¡ö ¡ö ¡ö
+	//  â– 
+	//â–  â–  â– 
 	{0,1,0,0,
 	 1,1,1,0,
 	 0,0,0,0,
 	 0,0,0,0,
 	},
 
-	//¡ö
-	//¡ö ¡ö
-	//¡ö
+	//â– 
+	//â–  â– 
+	//â– 
 	{1,0,0,0,
 	 1,1,0,0,
 	 1,0,0,0,
 	 0,0,0,0,
 	},
 
-	//¡ö ¡ö ¡ö
-	//  ¡ö
+	//â–  â–  â– 
+	//  â– 
 	{1,1,1,0,
 	 0,1,0,0,
 	 0,0,0,0,
@@ -77,112 +79,115 @@ char g_szBox[][16] = {
 	},
 
 
-	//  ¡ö
-	//¡ö ¡ö
-	//  ¡ö
+	//  â– 
+	//â–  â– 
+	//  â– 
 	{0,1,0,0,
 	 1,1,0,0,
 	 0,1,0,0,
 	 0,0,0,0,
 	},
 
-	//¡ö
-	//¡ö ¡ö ¡ö
+	//â– 
+	//â–  â–  â– 
 	{1,0,0,0,
 	 1,1,1,0,
 	 0,0,0,0,
 	 0,0,0,0,
 	},
 
-	//¡ö ¡ö
-	//¡ö  
-	//¡ö
+	//â–  â– 
+	//â–   
+	//â– 
 	{1,1,0,0,
 	 1,0,0,0,
 	 1,0,0,0,
 	 0,0,0,0,
 	},
 
-	//¡ö ¡ö ¡ö
-	//    ¡ö
+	//â–  â–  â– 
+	//    â– 
 	{1,1,1,0,
 	 0,0,1,0,
 	 0,0,0,0,
 	 0,0,0,0,
 	},
 
-	//  ¡ö 
-	//  ¡ö  
-	//¡ö ¡ö
+	//  â–  
+	//  â–   
+	//â–  â– 
 	{0,1,0,0,
 	 0,1,0,0,
 	 1,1,0,0,
 	 0,0,0,0,
 	},
 
-	//¡ö ¡ö
-	//  ¡ö ¡ö
+	//â–  â– 
+	//  â–  â– 
 	{1,1,0,0,
 	 0,1,1,0,
 	 0,0,0,0,
 	 0,0,0,0,
-	},
-	//¡ö ¡ö
-	//  ¡ö ¡ö
-	{1,1,0,0,
-	 0,1,1,0,
-	 0,0,0,0,
-	 0,0,0,0,
-	},
+	},	
 
-	//  ¡ö
-	//¡ö ¡ö 
-	//¡ö
-	{0,1,0,0,
-	 1,1,0,0,
-	 1,0,0,0,
-	 0,0,0,0,
-	},
-	//  ¡ö
-	//¡ö ¡ö 
-	//¡ö
+	//  â– 
+	//â–  â–  
+	//â– 
 	{0,1,0,0,
 	 1,1,0,0,
 	 1,0,0,0,
 	 0,0,0,0,
 	},
 
-	//¡ö ¡ö
-	//¡ö ¡ö
+	//â–  â– 
+	//  â–  â– 
+	{1,1,0,0,
+	 0,1,1,0,
+	 0,0,0,0,
+	 0,0,0,0,
+	},
+
+	//  â– 
+	//â–  â–  
+	//â– 
+	{0,1,0,0,
+	 1,1,0,0,
+	 1,0,0,0,
+	 0,0,0,0,
+	},
+
+	//â–  â– 
+	//â–  â– 
 	{1,1,0,0,
 	 1,1,0,0,
 	 0,0,0,0,
 	 0,0,0,0,
 	},
-	//¡ö ¡ö
-	//¡ö ¡ö
+	//â–  â– 
+	//â–  â– 
 	{1,1,0,0,
 	 1,1,0,0,
 	 0,0,0,0,
 	 0,0,0,0,
 	},
-	//¡ö ¡ö
-	//¡ö ¡ö
+	//â–  â– 
+	//â–  â– 
 	{1,1,0,0,
 	 1,1,0,0,
 	 0,0,0,0,
 	 0,0,0,0,
 	},
-	//¡ö ¡ö
-	//¡ö ¡ö
+	//â–  â– 
+	//â–  â– 
 	{1,1,0,0,
 	 1,1,0,0,
 	 0,0,0,0,
 	 0,0,0,0,
 	},
 };
+int g_score = 0;
 
-//³õÊ¼Ç½
+//åˆå§‹å¢™
 void InitWall() {
 	for (int i = 0; i < ROW; ++i) {
 		for (int j = 0; j < COL; ++j) {
@@ -193,45 +198,44 @@ void InitWall() {
 	}
 }
 
-//³õÊ¼»¯·½¿é
+//åˆå§‹åŒ–æ–¹å—
 void InitBox() {
 	for (int i = 0; i < BOX_WIDTH; ++i) {
 		for (int j = 0; j < BOX_WIDTH; ++j) {
-			if (g_szBox[g_BoxIndex][i * BOX_WIDTH + j] == 1) {
-				g_szTetris[g_BoxMarkRow + i][g_BoxMarkCol + j] = 2;//½«·½¿éĞ´Èë´óÊı×é£¬2ÊÇÎªÁËºÍÇ½Çø·Ö
+			if (g_szBox[g_BoxIndex][i * BOX_WIDTH + j] == 1) {//boxå½¢çŠ¶ä¸­å¦‚æœæœ‰é»‘è‰²
+				g_szTetris[g_BoxMarkRow + i][g_BoxMarkCol + j] = 2;//å°†æ–¹å—å†™å…¥å¤§æ•°ç»„ï¼Œ2æ˜¯ä¸ºäº†å’Œå¢™åŒºåˆ†
 			}			
 		}
 	}
 }
 
-//´´½¨·½¿é
-void CreateBox() {
-	
+//åˆ›å»ºæ–¹å—
+void CreateBox() {	
 	g_BoxType = rand() % 5;
 	g_BoxShape = rand() % 4;
 	g_BoxIndex = g_BoxType * 4 + g_BoxShape;
-	g_BoxMarkRow = 0;//³õÊ¼row³öÏÖÎ»ÖÃ
-	g_BoxMarkCol = 6;//³õÊ¼col³öÏÖÎ»ÖÃ
+	g_BoxMarkRow = 0;//åˆå§‹rowå‡ºç°ä½ç½®
+	g_BoxMarkCol = 6;//åˆå§‹colå‡ºç°ä½ç½®
 	InitBox();
 }
 
-//Çå³ı·½¿é
+//æ¸…é™¤æ–¹å—
 void ClearBox() {
 	for (int i = 0; i < BOX_WIDTH; ++i) {
 		for (int j = 0; j < BOX_WIDTH; ++j) {
-			if (g_szBox[g_BoxIndex][i * BOX_WIDTH + j] == 1) {
+			if (g_szBox[g_BoxIndex][i * BOX_WIDTH + j] == 1) {//è¿˜åœ¨ä¸‹è½çŠ¶æ€çš„é»‘è‰²æ–¹å—æ‰æ¸…é›¶
 				g_szTetris[g_BoxMarkRow + i][g_BoxMarkCol + j] = 0;
 			}
 		}
 	}
 }
 
-//ÊÇ·ñ¿ÉÒÆ¶¯»òĞı×ª
+//æ˜¯å¦å¯ç§»åŠ¨æˆ–æ—‹è½¬
 bool CanBoxMoveOrSpin(int boxMarkRow, int boxMarkCol, int boxIndex) {
 	for (int i = 0; i < BOX_WIDTH; ++i) {
 		for (int j = 0; j < BOX_WIDTH; ++j) {
-			if (1 == g_szTetris[boxMarkRow + i][boxMarkCol + j] &&	1 == g_szBox[i][j + boxIndex] ||
-				3 == g_szTetris[boxMarkRow + i][boxMarkCol + j] && 1 == g_szBox[i][j + boxIndex]) {
+			if (1 == g_szTetris[boxMarkRow + i][boxMarkCol + j] && 1 == g_szBox[boxIndex][i * BOX_WIDTH + j] ||
+				3 == g_szTetris[boxMarkRow + i][boxMarkCol + j] && 1 == g_szBox[boxIndex][i * BOX_WIDTH + j]) {
 				return false;
 			}
 		}
@@ -239,18 +243,54 @@ bool CanBoxMoveOrSpin(int boxMarkRow, int boxMarkCol, int boxIndex) {
 	return true;
 }
 
-//¹Ì¶¨·½¿é 
+//å›ºå®šæ–¹å— 
 void FixBox() {
 	for (int i = 0; i < BOX_WIDTH; ++i) {
 		for (int j = 0; j < BOX_WIDTH; ++j) {
 			if (2 == g_szTetris[g_BoxMarkRow + i][g_BoxMarkCol + j]) {
-				g_szTetris[g_BoxMarkRow + i][g_BoxMarkCol + j] = 3;//¹Ì¶¨·½¿é 
+				g_szTetris[g_BoxMarkRow + i][g_BoxMarkCol + j] = 3;//å›ºå®šæ–¹å— 
 			}
 		}
 	}
 }
 
-//Ğı×ª
+//æ˜¯å¦èƒ½æ¶ˆè¡Œ
+bool ClearLine() {
+	int nLineBeg = -1;//æ¶ˆè¡Œèµ·å§‹,å¦‚æœåç»­è¢«èµ‹å€¼ï¼Œä¹Ÿæ˜¯memmoveè¦ç§»åŠ¨çš„è¡Œæ•°
+	int nLineEnd = -1;//æ¶ˆè¡Œç»“æŸ
+	
+	for (int i = 0; i < ROW-1; ++i) {//ROW-1æ’é™¤å¢™å ç”¨çš„åœ°æ–¹
+		bool isLineFull = true;
+		for (int j = 1; j < COL-1; ++j) {//j = 1å’ŒCOL-1æ’é™¤å¢™å ç”¨çš„åœ°æ–¹
+			if (g_szTetris[i][j] == 0) {//æœ‰ç©ºä½
+				isLineFull = false;
+				break;
+			}
+		}
+		if (isLineFull) {
+			if (nLineBeg == -1) {//å¦‚æœå¼€å§‹è¡Œæœªè®°å½•
+				nLineBeg = i;//è®°å½•å¼€å§‹è¡Œ
+				nLineEnd = nLineBeg;//å¦‚æœåªæ¶ˆäº†1è¡Œ
+			}
+			else {
+				nLineEnd = i;//è®°å½•ç»“æŸè¡Œ
+			}
+			for (int j = 0; j < COL; ++j) {
+				g_szTetris[i][j] = 0; //æœ‰ç©ºä½				
+			}
+		}
+	}
+
+	if (nLineBeg != -1) {//çš„ç¡®æ¶ˆè¡Œäº†
+		bool nClearCount = nLineEnd - nLineBeg + 1;//æ€»å…±æ¶ˆäº†å‡ è¡Œ
+		int nMoveLines = nLineBeg;
+		memmove(g_szTetris[nClearCount], g_szTetris[0], sizeof(TCHAR) * COL * nMoveLines);//ä»ç¬¬0è¡Œå¼€å§‹ç§»åŠ¨
+		return true;
+	}
+	return false;
+}
+
+//æ—‹è½¬
 void MoveUp() {
 	int boxShape = (g_BoxShape + 1) % 4;
 	int boxIndex = g_BoxType * 4 + g_BoxShape;
@@ -262,7 +302,7 @@ void MoveUp() {
 	}
 }
 
-//ÏòÏÂÒÆ¶¯
+//å‘ä¸‹ç§»åŠ¨
 void MoveDown() {	
 	if (CanBoxMoveOrSpin(g_BoxMarkRow+1, g_BoxMarkCol, g_BoxIndex)) {
 		ClearBox();
@@ -270,20 +310,21 @@ void MoveDown() {
 		InitBox();
 	}
 	else {
-		//¹Ì¶¨·½¿é
+		//å›ºå®šæ–¹å—
 		FixBox();
-		//ÊÇ·ñ¿ÉÏûĞĞ
-			//¼Ó·Ö
-				//ÅĞ¶Ï»ı·Ö
-					//»ı·Ö¸ß£¬ÏÂÂäËÙ¶ÈÔò¼Ó¿ì
-		//²úÉúĞÂ·½¿é
+		//æ˜¯å¦å¯æ¶ˆè¡Œ
+		ClearLine();
+			//åŠ åˆ†
+				//åˆ¤æ–­ç§¯åˆ†
+					//ç§¯åˆ†é«˜ï¼Œä¸‹è½é€Ÿåº¦åˆ™åŠ å¿«
+		//äº§ç”Ÿæ–°æ–¹å—
 		CreateBox();
-		//ÏÔÊ¾ĞÂ·¿¿ì
+		//æ˜¾ç¤ºæ–°æˆ¿å¿«
 		ShowUI();
 	}
 }
 
-//Ïò×óÒÆ¶¯
+//å‘å·¦ç§»åŠ¨
 void MoveLeft() {
 	if (CanBoxMoveOrSpin(g_BoxMarkRow, g_BoxMarkCol-1, g_BoxIndex)) {
 		ClearBox();
@@ -292,7 +333,7 @@ void MoveLeft() {
 	}	
 }
 
-//ÏòÓÒÒÆ¶¯
+//å‘å³ç§»åŠ¨
 void MoveRight() {
 	if (CanBoxMoveOrSpin(g_BoxMarkRow, g_BoxMarkCol + 1, g_BoxIndex)) {
 		ClearBox();
@@ -306,26 +347,32 @@ void MoveRight() {
 
 
 
-//»­½çÃæ
+//ç”»ç•Œé¢
 void ShowUI() {
-	system("cls");
+	_tsystem(_T("cls"));
 	for (int i = 0; i < ROW; ++i) {
 		for (int j = 0; j < COL; ++j) {
-			if (g_szTetris[i][j] == 1 || g_szTetris[i][j] == 2) {
-				cout << "¡ö";
-			}
-			else if (g_szTetris[i][j] == 3) {
-				cout << "¡õ";
-			}
-			else {
-				cout << "  ";
+			switch (g_szTetris[i][j]) {
+			case 1://å¢™
+				_tprintf(_T("â€»"));
+				break;
+			case 2://ä¸‹è½çŠ¶æ€ä¸­çš„é»‘è‰²æ–¹å—
+				_tprintf(_T("â– "));
+				break;
+			case 3://æ–¹å¿«å·²ç»è½åœ°
+				_tprintf(_T("â—†"));
+				break;			
+			default:
+				_tprintf(_T("  "));//ç©ºç™½åŒºåŸŸ
+				break;
 			}
 		}
-		cout << endl;
+		_tprintf(_T("\n"));
+		//cout << endl;
 	}
 }
 
-//¿ØÖÆ·½¿é
+//æ§åˆ¶æ–¹å—
 void ControlBox() {
 	clock_t lastTime = clock();
 
@@ -337,22 +384,22 @@ void ControlBox() {
 			ShowUI();
 		}
 		if (_kbhit()) {
-			int ch = _getch();//¼ıÍ·Òª°´Á½´Î£¬µÚÒ»´ÎºöÂÔ
-			ch = _getch();//ÉÏ72 ×ó75 ÓÒ77 ÏÂ80
+			int ch = _getch();//ç®­å¤´è¦æŒ‰ä¸¤æ¬¡ï¼Œç¬¬ä¸€æ¬¡å¿½ç•¥
+			ch = _getch();//ä¸Š72 å·¦75 å³77 ä¸‹80
 			switch (ch) {
-			case 72://ÉÏ72
+			case 72://ä¸Š72
 				MoveUp();
 				ShowUI();
 				break;
-			case 75://×ó75
+			case 75://å·¦75
 				MoveLeft();
 				ShowUI();
 				break;
-			case 77://ÓÒ77
+			case 77://å³77
 				MoveRight();
 				ShowUI();
 				break;
-			case 80://ÏÂ80
+			case 80://ä¸‹80
 				MoveDown();
 				ShowUI();
 				break;
@@ -363,10 +410,11 @@ void ControlBox() {
 	}
 }
 
-//¿ªÊ¼ÓÎÏ·
+//å¼€å§‹æ¸¸æˆ
 int StartGame() {
 	srand((unsigned)time(NULL));
-	//»­½çÃæ
+	setlocale(LC_ALL, "zh-CN");
+	//ç”»ç•Œé¢
 	InitWall();
 	CreateBox();
 	ShowUI();
